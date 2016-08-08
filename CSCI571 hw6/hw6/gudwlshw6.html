@@ -1,0 +1,56 @@
+<html>
+<head>
+<title> Hyung-Jin Kim CSCI571 Homework4 </title>
+<body>
+<script type="text/javascript">
+function checkInput(input){
+var location = input.LOC.value;
+var type =input.types.value
+if (!location)
+	alert ("Please enter a location");
+
+else{
+// validation for zipcode 
+if(type=="zipcode"){
+	var re=/^\d{5}([\-]\d{4})?$/;
+	if(re.test(location))
+	{
+		alert("zipcode = "+location);
+		return true;
+	}
+	else {
+		alert("invlalid zipcode");
+		return false;
+	}
+
+}
+
+else {
+document.write("Error In Ihe Input");
+return false;
+}
+
+return true;
+window.location.herf= "get_wheather.php?location="+location +"&type=" +type;
+
+}
+
+</script>
+</head>
+<center>
+Weather Search
+
+<form name="myform" method="GET" id="location">
+<input type="text" name="LOC" maxlength="255" size="40" />
+<select name="types">
+<option value ="city" selected>City
+<option value ="zipcode">Zipcode
+</select>
+
+<br/>
+<input type="button" name="submit" value="Submit Query" onClick="checkInput(this.form)"/>
+</form>
+</center>
+<noscript>
+</body>
+</html>

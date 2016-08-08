@@ -1,0 +1,105 @@
+<html>
+<head>
+<title> Hyung-Jin Kim CSCI571 Homework4 </title>
+<!--<body>-->
+<script type="text/javascript">
+
+function generateHTML(xmlDoc)
+   {  
+	ELEMENT_NODE = 1;    // MS parser doesn't define Node.ELEMENT_NODE
+           root=xmlDoc.DocumentElement;
+           html_text="<html><head><title>XML Parse Result</title></head><bo"+"dy>";
+           html_text+="<table border='2'>";
+           books=xmlDoc.getElementsByTagName("book");
+           bookNodeList=books.item(0).childNodes;
+           html_text+="<tbo"+"dy";
+           html_text+="<tr>";
+           x=0;  y=0;
+	   // output the headers
+           for(i=0;i<bookNodeList.length;i++)
+           {  if(bookNodeList.item(i).nodeType==ELEMENT_NODE)
+			   {  header=bookNodeList.item(i).nodeName;
+					if(header=="author")
+				   {  header="author";  x=120;  y=55;  }
+					if(header=="title")
+				   {  header="title";  x=100;  y=67;  }
+					if(header=="genre")
+				      { header="genre";}
+					if(header=="price")  
+					{header="price";}
+					if(header=="publish_date")    
+					{header="publish_date";}
+					if(header=="description")
+					{header="description";}
+			html_text+="<th>"+header+"</th>";  }   
+			}
+           html_text+="</tr>";
+           // output out the values
+           for(i=0;i<books.length;i++) //do for all books
+           {  bookNodeList=books.item(i).childNodes; //get properties of a books
+               html_text+="<tr>";      //start a new row of the output table
+               for(j=0;j<bookNodeList.length;j++)
+               {  if(bookNodeList.item(j).nodeType==ELEMENT_NODE)
+			        {
+			if(bookNodeList.item(j).nodeName=="image")
+				{//handle images separately
+			html_text+="<td><img src='"+bookNodeList.item(j).firstChild.nodeValue+"' width='"+x+"' height='"+y+"'></td>";  }
+		else {
+html_text+="<td>"+bookNodeList.item(j).firstChild.nodeValue+"</td>";
+		}   }    }
+               html_text+="</tr>";  }
+           html_text+="</tbody>";  html_text+="</table>";
+           html_text+="<noscript></bo"+"dy></html>";  
+}
+
+function viewXML(what){
+var URL = what.URL.value;
+  function loadXML(url) {
+      if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+       xmlhttp=new XMLHttpRequest();   }
+ else {// code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");  }
+  xmlhttp.open("GET",url,false);
+  xmlhttp.send();
+  xmlDoc=xmlhttp.responseXML;
+  return xmlDoc;   
+  }
+  
+  xmlDoc = loadXML(URL); // handle XML file 
+
+  if (xmlDoc.documentElement.nodeName=="parsererror") //error checking firefox 
+	{	
+	alert("Error in XML file");
+}else{
+ if (window.ActiveXObject) //if IE, simply execute script (due to async prop).
+ {  if (xmlDoc.parseError.errorCode != 0) {
+    var myErr = xmlDoc.parseError;
+    generateError(xmlDoc);
+    hWin = window.open("", "Error", "scrollbars=1,height=600,width=500");
+    hWin.document.write(html_text);
+  } else {  generateHTML(xmlDoc);
+            hWin = window.open("", "Assignment4", "scrollbars=1,height=600,width=500");
+            hWin.document.write(html_text);   }
+ } else //else if FF, execute script once XML object has loaded
+ {  xmlDoc.onload=generateHTML(xmlDoc);
+    hWin = window.open("", "Assignment4", "scrollbars=1,height=600,width=500");
+    hWin.document.write(html_text);  }
+ hWin.document.close();  }
+ }
+ </script>
+ </head>
+
+
+<center>
+Enter URL for Book XML File 
+
+<form name="myform" method="GET" id="location">
+<input type="text" name="URL" maxlength="255" size="40" />
+<br/>
+<input type="button" name="submit" value="Submit Query" onClick="viewXML(this.form)" />
+</form>
+</center>
+<noscript>
+</body>
+</html>
